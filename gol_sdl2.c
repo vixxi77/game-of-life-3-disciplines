@@ -55,7 +55,7 @@ int main(void){
 			}
 		}		
 		SDL_GetMouseState(&mouse_x, &mouse_y);
-		printf("\rMouse position X: %d Y: %d ", mouse_x, mouse_y);
+		printf("\rCell at position COLUMN: %d ROW: %d ", mouse_x/cell_size, mouse_y/cell_size);
 		fflush(stdout);
 		SDL_RenderPresent(renderer);
 		SDL_Delay(16);
