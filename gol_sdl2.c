@@ -4,6 +4,11 @@
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 800
 
+typedef struct{
+	SDL_Rect rectangle;
+	SDL_Color color;
+}Cell;
+
 const int cell_size = 25;
 const int rows = SCREEN_HEIGHT/cell_size;
 const int columns = SCREEN_WIDTH/cell_size;
@@ -14,6 +19,7 @@ int main(void){
 	SDL_Renderer *renderer;
 	int mouse_x;
 	int mouse_y;
+	Cell cell[rows][columns];
 
 	SDL_Init(SDL_INIT_VIDEO);
 
@@ -29,6 +35,7 @@ int main(void){
 	SDL_RenderClear(renderer);
 
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+	/*
 	for(int y = 0; y < rows; y++){
 		for(int x = 0; x < columns; x++){
 			rectangle.x = curr_pos_x;
@@ -44,6 +51,14 @@ int main(void){
 		curr_pos_y += cell_size;
 		curr_pos_x = 0;
 	}	
+	*/
+	for(int y = 0; y < rows; y++){
+		for(int x = 0; x < columns; x++){
+			cell[x][y].rectangle = (SDL_Rect) {x * cell_size, y * cell_size, cell_size - 1, cell_size - 1};
+			SDL_RenderFillRect(renderer, &cell[x][y].rectangle);
+			cell[x][y].color = (SDL_Color) {0, 0, 0, 255};
+		}
+	}	
 
 	int running = 1;
 	while(running){
@@ -55,6 +70,10 @@ int main(void){
 			}
 		}		
 		SDL_GetMouseState(&mouse_x, &mouse_y);
+		SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+		SDL_RenderFillRect(renderer, &cell[mouse_x/cell_size][mouse_y/cell_size].rectangle);
+
+		
 		printf("\rCell at position COLUMN: %d ROW: %d ", mouse_x/cell_size, mouse_y/cell_size);
 		fflush(stdout);
 		SDL_RenderPresent(renderer);
