@@ -25,6 +25,20 @@ int main(void){
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 	SDL_RenderClear(renderer);
 
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+	for(int y = 0; y < rows; y++){
+		for(int x = 0; x < columns; x++){
+			rectangle.x = curr_pos_x;
+			rectangle.y = curr_pos_y;
+			rectangle.w = cell_size - 1;
+			rectangle.h = cell_size - 1;
+			SDL_RenderFillRect(renderer, &rectangle);
+			curr_pos_x += cell_size;
+		}
+		curr_pos_y += cell_size;
+		curr_pos_x = 0;
+	}	
+
 	int running = 1;
 	while(running){
 		while(SDL_PollEvent(&event)){  
@@ -34,20 +48,6 @@ int main(void){
 					break;
 			}
 		}		
-
-		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-		for(int y = 0; y < rows; y++){
-			for(int x = 0; x < columns; x++){
-				rectangle.x = curr_pos_x;
-				rectangle.y = curr_pos_y;
-				rectangle.w = cell_size - 1;
-				rectangle.h = cell_size - 1;
-				SDL_RenderFillRect(renderer, &rectangle);
-				curr_pos_x += cell_size;
-			}
-			curr_pos_y += cell_size;
-			curr_pos_x = 0;
-		}	
 
 		SDL_RenderPresent(renderer);
 		SDL_Delay(16);
