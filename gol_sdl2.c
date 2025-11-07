@@ -9,7 +9,7 @@ typedef struct{
 	SDL_Color color;
 }Cell;
 
-const int cell_size = 25;
+const int cell_size = 10;
 const int rows = SCREEN_HEIGHT/cell_size;
 const int columns = SCREEN_WIDTH/cell_size;
 
@@ -60,20 +60,32 @@ int main(void){
 		}
 	}	
 
+	int mouse_down = 0;
 	int running = 1;
 	while(running){
+		SDL_GetMouseState(&mouse_x, &mouse_y);
 		while(SDL_PollEvent(&event)){  
 			switch(event.type){
 				case SDL_QUIT:
 					running = 0;
 					break;
+				case SDL_MOUSEBUTTONDOWN:
+					mouse_down = 1;
+					printf("down, %d", mouse_down);
+					break;
+				case SDL_MOUSEBUTTONUP:
+					mouse_down = 0;
+					printf("release, %d", mouse_down);
+					break;
 			}
 		}		
-		SDL_GetMouseState(&mouse_x, &mouse_y);
-		SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-		SDL_RenderFillRect(renderer, &cell[mouse_x/cell_size][mouse_y/cell_size].rectangle);
 
-		
+		if(mouse_down){
+			SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+			SDL_RenderFillRect(renderer, &cell[mouse_x/cell_size][mouse_y/cell_size].rectangle);
+
+		}
+
 		printf("\rCell at position COLUMN: %d ROW: %d ", mouse_x/cell_size, mouse_y/cell_size);
 		fflush(stdout);
 		SDL_RenderPresent(renderer);
