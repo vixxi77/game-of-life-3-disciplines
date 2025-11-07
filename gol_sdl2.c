@@ -1,4 +1,5 @@
 #include <SDL2/SDL.h>
+#include <stdio.h>
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 800
@@ -11,6 +12,8 @@ int main(void){
 	SDL_Window *window;
 	SDL_Event event;
 	SDL_Renderer *renderer;
+	int mouse_x;
+	int mouse_y;
 
 	SDL_Init(SDL_INIT_VIDEO);
 
@@ -34,6 +37,9 @@ int main(void){
 			rectangle.h = cell_size - 1;
 			SDL_RenderFillRect(renderer, &rectangle);
 			curr_pos_x += cell_size;
+			if(y < 1){
+				printf("Rectangle %d, at position x: %d y: %d \n", x, rectangle.x, rectangle.y);
+			}
 		}
 		curr_pos_y += cell_size;
 		curr_pos_x = 0;
@@ -48,7 +54,9 @@ int main(void){
 					break;
 			}
 		}		
-
+		SDL_GetMouseState(&mouse_x, &mouse_y);
+		printf("\rMouse position X: %d Y: %d ", mouse_x, mouse_y);
+		fflush(stdout);
 		SDL_RenderPresent(renderer);
 		SDL_Delay(16);
 	}
