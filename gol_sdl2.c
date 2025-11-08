@@ -1,5 +1,6 @@
 #include <SDL2/SDL.h>
 #include <stdio.h>
+#include <time.h>
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 800
@@ -40,13 +41,25 @@ int main(void){
 		for(int x = 0; x < columns; x++){
 			cell[x][y].rectangle = (SDL_Rect) {x * cell_size, y * cell_size, cell_size - 1, cell_size - 1};
 			SDL_RenderFillRect(renderer, &cell[x][y].rectangle);
+			cell[x][y].isAlive = 0;
 			cell[x][y].color = (SDL_Color) {0, 0, 0, 255};
 		}
 	}	
 
+
 	int mouse_down = 0;
 	int running = 1;
+	int alive_counter = 0;
+	double time_per_frame = 0;
+	int fps = 0;
+	cell[0][0].isAlive = 1;
+	cell[0][1].isAlive = 1;
+	cell[1][0].isAlive = 1;
+
 	while(running){
+		clock_t start = clock();
+
+
 		SDL_GetMouseState(&mouse_x, &mouse_y);
 		while(SDL_PollEvent(&event)){  
 			switch(event.type){
@@ -65,14 +78,61 @@ int main(void){
 		}		
 
 		if(mouse_down){
-			SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-			SDL_RenderFillRect(renderer, &cell[mouse_x/cell_size][mouse_y/cell_size].rectangle);
 			cell[mouse_x/cell_size][mouse_y/cell_size].isAlive = 1;
 		}
 
-		printf("\rCell at position COLUMN: %d ROW: %d ", mouse_x/cell_size, mouse_y/cell_size);
-		fflush(stdout);
+
+		for(int y = 0; y < rows; y++){
+			for(int x = 0; x < columns; x++){
+				if(cell[x-1][y].isAlive){
+					alive_counter += 1;
+				}else if(cell[x+1][y].isAlive){
+					alive_counter += 1;
+				}else if(cell[x][y-1].isAlive){
+					alive_counter += 1;
+				}else if(cell[x][y+1].isAlive){
+					alive_counter += 1;
+				}else if(cell[x+1][y+1].isAlive){
+					alive_counter += 1;
+				}else if(cell[x-1][y-1].isAlive){
+					alive_counter += 1;
+				}else if(cell[x+1][y-1].isAlive){
+					alive_counter += 1;
+				}else if(cell[x-1][y+1].isAlive){
+					alive_counter += 1;
+				}
+
+				if(cell[x][y].isAlive && alive_counter < 2){
+					cell[x][y].isAlive = 0;
+				}else if(cell[x][y].isAlive && alive_counter == 2 || alive_counter == 3){
+					cell[x][y].isAlive = 1;
+				}else if(cell[x][y].isAlive && alive_counter > 3){
+					cell[x][y].isAlive = 0;
+				}else if(!cell[x][y].isAlive && alive_counter == 3){
+					cell[x][y].isAlive = 1;
+				}
+				alive_counter = 0;
+
+				if(cell[x][y].isAlive){
+					SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+					SDL_RenderFillRect(renderer, &cell[x][y].rectangle);
+				}else if(!cell[x][y].isAlive){
+					SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+					SDL_RenderFillRect(renderer, &cell[x][y].rectangle);
+				} 
+			}
+		}	
+
+
+//		printf("\rCell at position COLUMN: %d ROW: %d ", mouse_x/cell_size, mouse_y/cell_size);
 		SDL_RenderPresent(renderer);
+
+		time_t end = clock();
+		time_per_frame = (double)(end - start) / CLOCKS_PER_SEC;
+		fps = (int)(60 / time_per_frame);
+		printf("\rMS: %f FPS: %d ", time_per_frame, fps);
+		fflush(stdout);
+
 		SDL_Delay(16);
 	}
 	SDL_Quit();
