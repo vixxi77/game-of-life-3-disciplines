@@ -7,9 +7,10 @@
 typedef struct{
 	SDL_Rect rectangle;
 	SDL_Color color;
+	int isAlive;
 }Cell;
 
-const int cell_size = 10;
+const int cell_size = 16;
 const int rows = SCREEN_HEIGHT/cell_size;
 const int columns = SCREEN_WIDTH/cell_size;
 
@@ -35,23 +36,6 @@ int main(void){
 	SDL_RenderClear(renderer);
 
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-	/*
-	for(int y = 0; y < rows; y++){
-		for(int x = 0; x < columns; x++){
-			rectangle.x = curr_pos_x;
-			rectangle.y = curr_pos_y;
-			rectangle.w = cell_size - 1;
-			rectangle.h = cell_size - 1;
-			SDL_RenderFillRect(renderer, &rectangle);
-			curr_pos_x += cell_size;
-			if(y < 1){
-				printf("Rectangle %d, at position x: %d y: %d \n", x, rectangle.x, rectangle.y);
-			}
-		}
-		curr_pos_y += cell_size;
-		curr_pos_x = 0;
-	}	
-	*/
 	for(int y = 0; y < rows; y++){
 		for(int x = 0; x < columns; x++){
 			cell[x][y].rectangle = (SDL_Rect) {x * cell_size, y * cell_size, cell_size - 1, cell_size - 1};
@@ -83,7 +67,7 @@ int main(void){
 		if(mouse_down){
 			SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
 			SDL_RenderFillRect(renderer, &cell[mouse_x/cell_size][mouse_y/cell_size].rectangle);
-
+			cell[mouse_x/cell_size][mouse_y/cell_size].isAlive = 1;
 		}
 
 		printf("\rCell at position COLUMN: %d ROW: %d ", mouse_x/cell_size, mouse_y/cell_size);
