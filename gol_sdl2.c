@@ -16,6 +16,8 @@ const int columns = SCREEN_WIDTH/cell_size;
 SDL_Window *window;
 SDL_Event event;
 SDL_Renderer *renderer;
+
+
 /*
 int generate_view(void (*gen)(struct Cell _cell[columns][rows])){
 	(*gen)();
@@ -50,32 +52,20 @@ int main(int argc, char *argv[]){
 	
 	if(argc > 1 && strcmp(argv[1], "-grid") == 0)
 		grid_lines = 1;
-	
-	if(grid_lines){
-		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-		SDL_RenderClear(renderer);
 
-		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-		for(int y = 0; y < rows; y++){
-			for(int x = 0; x < columns; x++){
-				cell[x][y].rectangle = (SDL_Rect) {x * cell_size, y * cell_size, cell_size - 1, cell_size - 1};
-				SDL_RenderFillRect(renderer, &cell[x][y].rectangle);
-				cell[x][y].isAlive = 0;
-			}
-		}	
-	}else{
-		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-		SDL_RenderClear(renderer);
+	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+	SDL_RenderClear(renderer);
 
-		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-		for(int y = 0; y < rows; y++){
-			for(int x = 0; x < columns; x++){
-				cell[x][y].rectangle = (SDL_Rect) {x * cell_size, y * cell_size, cell_size, cell_size};
-				SDL_RenderFillRect(renderer, &cell[x][y].rectangle);
-				cell[x][y].isAlive = 0;
-			}
-		}	
-	}
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+	for(int y = 0; y < rows; y++){
+		for(int x = 0; x < columns; x++){
+			cell[x][y].rectangle = (SDL_Rect) {x * cell_size, y * cell_size,
+				 grid_lines?cell_size - 1:cell_size ,grid_lines?cell_size - 1:cell_size};
+			SDL_RenderFillRect(renderer, &cell[x][y].rectangle);
+			cell[x][y].isAlive = 0;
+		}
+	}	
+
 	
 	while(running){
 		clock_t start = clock();
