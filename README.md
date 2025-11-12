@@ -1,1 +1,1 @@
-#Conwoys Game Of Life in SDL2/X11/RAYLIB
+#Simple Implementation of "Conwoys Game Of Life" using SDL2
