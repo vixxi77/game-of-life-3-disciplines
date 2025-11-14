@@ -10,12 +10,12 @@ typedef struct{
 	int isAlive;
 }Cell;
 
-const int cell_size = 16;
-const int rows = SCREEN_HEIGHT/cell_size;
-const int columns = SCREEN_WIDTH/cell_size;
-SDL_Window *window;
-SDL_Event event;
-SDL_Renderer *renderer;
+static const int cell_size = 16;
+static const int rows = SCREEN_HEIGHT/cell_size;
+static const int columns = SCREEN_WIDTH/cell_size;
+static SDL_Window *window;
+static SDL_Event event;
+static SDL_Renderer *renderer;
 
 
 /*
