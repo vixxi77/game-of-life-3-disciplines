@@ -73,31 +73,31 @@ int main(int argc, char *argv[]){
 		SDL_GetMouseState(&mouse_x, &mouse_y);
 		while(SDL_PollEvent(&event)){  
 			switch(event.type){
-				case SDL_QUIT:
-					running = 0;
-					break;
-				case SDL_MOUSEBUTTONDOWN:
-					mouse_down = 1;
-					printf("down, %d", mouse_down);
-					break;
-				case SDL_MOUSEBUTTONUP:
-					mouse_down = 0;
-					printf("release, %d", mouse_down);
-					break;
-				case SDL_KEYDOWN:
-					switch(event.key.keysym.scancode){
-						case SDL_SCANCODE_SPACE:
-							if(pause_toggle){
-								STATE_PAUSED = 0;	
-								pause_toggle = 0;
-							}else{
-								STATE_PAUSED = 1;
-								pause_toggle = 1;
-							}
-							
+			case SDL_QUIT:
+				running = 0;
+				break;
+			case SDL_MOUSEBUTTONDOWN:
+				mouse_down = 1;
+				printf("down, %d", mouse_down);
+				break;
+			case SDL_MOUSEBUTTONUP:
+				mouse_down = 0;
+				printf("release, %d", mouse_down);
+				break;
+			case SDL_KEYDOWN:
+				switch(event.key.keysym.scancode){
+				case SDL_SCANCODE_SPACE:
+					if(pause_toggle){
+						STATE_PAUSED = 0;	
+						pause_toggle = 0;
+					}else{
+						STATE_PAUSED = 1;
+						pause_toggle = 1;
 					}
-			}
-		}		
+						
+				}
+		}
+	}		
 
 
 
